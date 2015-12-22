@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.7">
+<file name="/home/vikki/git/mongorest/mongoser/src/test/java/in/mtap/iincube/mongoser/handlers/ReadRequestHandlerTest.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/test/java/in/mtap/iincube/mongoser/handlers/WriteRequestHandlerTest.java">
+</file>
+</checkstyle>

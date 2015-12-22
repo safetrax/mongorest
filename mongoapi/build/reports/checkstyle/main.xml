@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.7">
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/DBObjectEncoder.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/DocumentClient.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/FsClient.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/GridFsReader.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/GridFsRequestBuilder.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/GridFsUpdater.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/GridFsWriter.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/MongoClient.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/MongoCollectionFactory.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/MongoObjectFactory.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/MongoReader.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/MongoUpdater.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/MongoWriter.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoapi/src/main/java/in/mtap/iincube/mongoapi/internal/Utility.java">
+</file>
+</checkstyle>

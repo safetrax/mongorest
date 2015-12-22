@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.code.simple-spring-memcached:spymemcached:2.8.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.simple-spring-memcached/spymemcached/2.8.1/bdf2ec223eb7b126cff6837080a47227ad355c54/spymemcached-2.8.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.simple-spring-memcached/spymemcached/2.8.1/ed1733e75b5603a9de8438b58ce7f13fb694d479/spymemcached-2.8.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

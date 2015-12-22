@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile libraries.gson
+    compile libraries.javaxServlet
+    compile libraries.codec
+    compile 'org.eclipse.jetty.orbit:javax.servlet:3.0.0.v201112011016'
+    compile 'org.eclipse.jetty:jetty-server:8.1.2.v20120308'
+    compile 'org.eclipse.jetty:jetty-servlet:8.1.2.v20120308'
+    // compile libraries.mongoDriver
+    compile libraries.mongoapi
+    compile 'com.google.code.simple-spring-memcached:spymemcached:2.8.1'
+    compile 'org.apache.lucene:lucene-core:3.6.0'
+    testCompile libraries.junit
+    testCompile libraries.googleTruth
+    testCompile libraries.mockito
+}
+
+apply from: rootProject.file('gradle/test.gradle')
+apply from: rootProject.file('gradle/checkstyle.gradle')

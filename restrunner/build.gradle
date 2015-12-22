@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'in.mtap.iincube.restrunner.RestServer'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile libraries.mongoser
+    testCompile libraries.junit
+}
+
+apply from: rootProject.file('gradle/test.gradle')
+apply from: rootProject.file('gradle/checkstyle.gradle')

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.7">
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/Mongoser.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/MongoserErrorHandler.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/MongoserException.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/auth/AuthFactory.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/config/MongoConfig.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/config/ServerConfig.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/handlers/DbRequestHandler.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/handlers/GridFsRequestHandler.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/handlers/ReadRequestHandler.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/handlers/WriteRequestHandler.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/model/Status.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/servlet/ErrorServlet.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/servlet/GridFsServlet.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/servlet/MongoserServlet.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/servlet/QueryServlet.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/servlet/WriteServlet.java">
+</file>
+<file name="/home/vikki/git/mongorest/mongoser/src/main/java/in/mtap/iincube/mongoser/utils/Utility.java">
+</file>
+</checkstyle>
