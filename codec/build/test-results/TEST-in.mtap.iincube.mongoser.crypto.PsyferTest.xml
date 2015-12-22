@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="in.mtap.iincube.mongoser.crypto.PsyferTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2015-12-22T14:14:07" hostname="ThinkPad-T430" time="0.23">
-  <properties/>
-  <testcase name="withInvalidKey" classname="in.mtap.iincube.mongoser.crypto.PsyferTest" time="0.228"/>
-  <testcase name="withValidKey" classname="in.mtap.iincube.mongoser.crypto.PsyferTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
