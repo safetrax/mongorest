@@ -1,0 +1,25 @@
+*.log
+
+#ignoring emacs generated temp files
+*~
+[#]*[#]
+.\#*
+
+# Java class files
+*.class
+
+# Eclipse project files
+.classpath
+.project
+project.properties
+.settings/
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# remove gradle unwanted files
+build/
+.gradle/
