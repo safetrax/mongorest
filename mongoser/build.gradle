@@ -1,4 +1,15 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath libraries.gitpushplugin
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'git-repo'
 
 sourceCompatibility = 1.7
 version = '1.0'
@@ -15,6 +26,7 @@ dependencies {
     compile 'org.eclipse.jetty:jetty-server:8.1.2.v20120308'
     compile 'org.eclipse.jetty:jetty-servlet:8.1.2.v20120308'
     compile libraries.mongoapi
+
     testCompile libraries.junit
     testCompile libraries.googleTruth
     testCompile libraries.mockito
@@ -22,3 +34,4 @@ dependencies {
 
 apply from: rootProject.file('gradle/test.gradle')
 apply from: rootProject.file('gradle/checkstyle.gradle')
+apply from: rootProject.file('gradle/mvnpush.gradle')

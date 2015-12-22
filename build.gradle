@@ -13,5 +13,6 @@ ext.libraries = [
         googleTruth: 'com.google.truth:truth:0.27',
         junit: 'junit:junit:4.11',
         mockito: 'org.mockito:mockito-core:1.10.+',
-        apacheCommons: 'commons-codec:commons-codec:1.9'
+        apacheCommons: 'commons-codec:commons-codec:1.9',
+        gitpushplugin: 'com.ryanharter.gradle-git-repo:gradle-plugin:1.0.2'
 ]
