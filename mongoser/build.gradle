@@ -1,13 +1,3 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath libraries.gitpushplugin
-    }
-}
-
 apply plugin: 'java'
 apply plugin: 'git-repo'
 
@@ -19,13 +9,14 @@ repositories {
 }
 
 dependencies {
+    compile libraries.mongoapi
     compile libraries.gson
     compile libraries.javaxServlet
-    compile libraries.codec
+    compile libraries.apacheCommons
+
     compile 'org.eclipse.jetty.orbit:javax.servlet:3.0.0.v201112011016'
     compile 'org.eclipse.jetty:jetty-server:8.1.2.v20120308'
     compile 'org.eclipse.jetty:jetty-servlet:8.1.2.v20120308'
-    compile libraries.mongoapi
 
     testCompile libraries.junit
     testCompile libraries.googleTruth

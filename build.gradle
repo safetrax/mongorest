@@ -1,3 +1,31 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.ryanharter.gradle-git-repo:gradle-plugin:1.0.2'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        repositories {
+            maven {
+                url "https://raw.githubusercontent.com/iincube/mdeals/master/releases"
+                credentials {
+                    username GIT_USERNAME
+                    password GIT_PASSWORD
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+            }
+        }
+    }
+}
+
 ext {
     versionCode = 1
     versionName = "1.0"
@@ -7,9 +35,8 @@ ext.libraries = [
         javaxServlet: 'javax.servlet:javax.servlet-api:3.0.1',
         gson: 'com.google.code.gson:gson:2.4',
         mongoDriver: 'org.mongodb:mongo-java-driver:2.7.3',
-        mongoapi: project(':mongoapi'),
+        mongoapi: 'in.mtap.iincube:mongoapi:0.0.2',
         mongoser: project(':mongoser'),
-        codec: project(':codec'),
         googleTruth: 'com.google.truth:truth:0.27',
         junit: 'junit:junit:4.11',
         mockito: 'org.mockito:mockito-core:1.10.+',

@@ -1,2 +1,2 @@
-include ':mongoser', ':codec', ':mongoapi', ':restrunner'
+include ':mongoser', ':mongoapi', ':restrunner'
 

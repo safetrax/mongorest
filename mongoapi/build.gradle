@@ -1,3 +1,4 @@
+apply plugin: 'git-repo'
 apply plugin: 'java'
 
 sourceCompatibility = 1.7
@@ -8,8 +9,8 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
     compile libraries.mongoDriver
+
     testCompile libraries.junit
     testCompile libraries.googleTruth
     testCompile libraries.mockito
@@ -17,3 +18,4 @@ dependencies {
 
 apply from: rootProject.file('gradle/test.gradle')
 apply from: rootProject.file('gradle/checkstyle.gradle')
+apply from: rootProject.file('gradle/mvnpush.gradle')
