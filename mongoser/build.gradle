@@ -1,8 +1,6 @@
 apply plugin: 'java'
-apply plugin: 'git-repo'
 
 sourceCompatibility = 1.7
-version = '1.0'
 
 repositories {
     mavenCentral()
