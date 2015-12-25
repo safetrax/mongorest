@@ -3,12 +3,14 @@ Mongo REST
 
 Extensible MongoDB REST API used by safetrax
 
-[![travis][travis-image]][travis-url]
+[![travis][travis-image]][travis-url] [![maven-central][release-version]][maven-url]
 
 **Note:** Work in progress
 [travis-image]: https://img.shields.io/travis/safetrax/mongorest.svg?style=flat
 [travis-url]: https://travis-ci.org/safetrax/mongorest
 [socket-io]: https://socket.io/
+[release-version]: https://img.shields.io/maven-central/v/in.mtap.iincube/mongorest.svg?style=flat
+[maven-url]: http://repo1.maven.org/maven2/in/mtap/iincube/mongorest/0.1.0/
 
 
 License
