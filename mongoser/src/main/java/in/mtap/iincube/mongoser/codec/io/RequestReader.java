@@ -151,11 +151,19 @@ public class RequestReader {
     return -1;
   }
 
-  public boolean getAsBoolean(String name) {
+  @Deprecated public boolean getAsBoolean(String name) {
+    return getParameterAsBoolean(name);
+  }
+
+  public boolean getParameterAsBoolean(String name) {
     String paramValue = getUrlParameter(name);
     if (paramValue != null)
       return Boolean.parseBoolean(paramValue);
     return false;
+  }
+
+  public Object getTaggedObject(String name) {
+    return request.getAttribute(name);
   }
 
   /**
@@ -163,7 +171,7 @@ public class RequestReader {
    * <p>
    * Note: Max path decoding capacity is 2
    */
-  public String[] getPathInfo() {
+  @Deprecated public String[] getPathInfo() {
     if (paths != null)
       return paths;
     String pathInfo = request.getPathInfo();
@@ -176,6 +184,10 @@ public class RequestReader {
       paths[1] = matcher.group(2);
     }
     return paths;
+  }
+
+  public String getPath() {
+    return request.getPathInfo();
   }
 
   public String getUrlParameter(String name) {

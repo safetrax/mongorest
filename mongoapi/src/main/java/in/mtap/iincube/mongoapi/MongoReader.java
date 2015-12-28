@@ -92,12 +92,17 @@ public class MongoReader {
     while (cursor.hasNext()) {
       result.add(cursor.next());
     }
+    cursor.close();
     return result;
   }
 
   public <T> T query(DBObjectEncoder<T> encoder) {
-    assertNotNull(encoder, "encoder == null");
-
-    return encoder.encode(getCursor());
+    DBCursor cursor = getCursor();
+    try {
+      assertNotNull(encoder, "encoder == null");
+      return encoder.encode(cursor);
+    } finally {
+      cursor.close();
+    }
   }
 }
