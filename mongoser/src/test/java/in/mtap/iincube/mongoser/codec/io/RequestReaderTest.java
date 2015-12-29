@@ -117,6 +117,24 @@ public class RequestReaderTest {
     assertThat(resultData.getData()).isNull();
   }
 
+  @Test public void readPlainText() throws Exception {
+    String plainText = "Hello there";
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    when(request.getInputStream()).thenReturn(getAsInputStream(plainText));
+
+    RequestReader reader = new RequestReader(request);
+    assertThat(reader.readAsString()).isEqualTo(plainText);
+  }
+
+  @Test public void getTypeSafeTagObject() throws Exception {
+    Long tag = 1000L;
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    when(request.getAttribute("o")).thenReturn(tag);
+
+    RequestReader reader = new RequestReader(request);
+    assertThat(reader.getTaggedObject("o", Long.class)).isEqualTo(tag);
+  }
+
   private ServletInputStream getAsInputStream(String value) {
     return new MockServletInputStream(new ByteArrayInputStream(value.getBytes(UTF_8)));
   }

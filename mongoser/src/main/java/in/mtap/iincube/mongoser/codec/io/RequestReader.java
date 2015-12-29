@@ -134,6 +134,20 @@ public class RequestReader {
     return data;
   }
 
+  /** read input stream as plain text */
+  public String readAsString() throws IOException {
+    InputStream stream = getInputStream();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+    StringBuilder resultData = new StringBuilder();
+    String strData = reader.readLine();
+    while (strData != null) {
+      resultData.append(strData);
+      strData = reader.readLine();
+    }
+    reader.close();
+    return resultData.toString();
+  }
+
   /** Supports only reading url param dbname=value */
   public String getDbName() {
     return request.getParameter("dbname");
@@ -164,6 +178,10 @@ public class RequestReader {
 
   public Object getTaggedObject(String name) {
     return request.getAttribute(name);
+  }
+
+  public <T> T getTaggedObject(String name, Class<T> cls) {
+    return (T) request.getAttribute(name);
   }
 
   /**
