@@ -27,7 +27,7 @@ public interface Response {
 
   void send(int code, Meta meta, String out) throws IOException;
 
-  /** uses meta as {@link Meta#NOCACHE_JSON */
+  /** uses meta as {@link Meta#NOCACHE_JSON} */
   void send(int code, JsonElement out) throws IOException;
 
   void send(int code, Meta meta, JsonElement out) throws IOException;
