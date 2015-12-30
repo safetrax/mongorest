@@ -86,7 +86,22 @@ public class MongoReader {
     return cursor;
   }
 
-  public List<DBObject> query() {
+  @Deprecated public List<DBObject> query() {
+    return execute();
+  }
+
+  public List distinct(String key) {
+    if (queryObject == null)
+      return collectionFactory.get().distinct(key);
+    return collectionFactory.get().distinct(key, queryObject);
+  }
+
+  /** use {@link #execute(DBObjectEncoder)}*/
+  @Deprecated public <T> T query(DBObjectEncoder<T> encoder) {
+    return execute(encoder);
+  }
+
+  public List<DBObject> execute() {
     DBCursor cursor = getCursor();
     List<DBObject> result = new LinkedList<DBObject>();
     while (cursor.hasNext()) {
@@ -96,13 +111,7 @@ public class MongoReader {
     return result;
   }
 
-  public List distinct(String key) {
-    if (queryObject == null)
-      return collectionFactory.get().distinct(key);
-    return collectionFactory.get().distinct(key, queryObject);
-  }
-
-  public <T> T query(DBObjectEncoder<T> encoder) {
+  public <T> T execute(DBObjectEncoder<T> encoder) {
     DBCursor cursor = getCursor();
     try {
       assertNotNull(encoder, "encoder == null");
