@@ -13,7 +13,7 @@ ext.libraries = [
         javaxServlet: 'javax.servlet:javax.servlet-api:3.0.1',
         gson: 'com.google.code.gson:gson:2.4',
         mongoDriver: 'org.mongodb:mongo-java-driver:2.7.3',
-        mongoapi: 'in.mtap.iincube:mongoapi:0.0.9',
+        mongoapi: project(':mongoapi'),
         mongoser: project(':mongoser'),
         googleTruth: 'com.google.truth:truth:0.27',
         junit: 'junit:junit:4.11',
