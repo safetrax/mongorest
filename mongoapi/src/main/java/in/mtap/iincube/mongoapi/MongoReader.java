@@ -96,6 +96,12 @@ public class MongoReader {
     return result;
   }
 
+  public List distinct(String key) {
+    if (queryObject == null)
+      return collectionFactory.get().distinct(key);
+    return collectionFactory.get().distinct(key, queryObject);
+  }
+
   public <T> T query(DBObjectEncoder<T> encoder) {
     DBCursor cursor = getCursor();
     try {
