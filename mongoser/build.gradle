@@ -12,7 +12,6 @@ dependencies {
     compile libraries.javaxServlet
     compile libraries.apacheCommons
 
-    compile 'org.eclipse.jetty.orbit:javax.servlet:3.0.0.v201112011016'
     compile 'org.eclipse.jetty:jetty-server:8.1.2.v20120308'
     compile 'org.eclipse.jetty:jetty-servlet:8.1.2.v20120308'
 
