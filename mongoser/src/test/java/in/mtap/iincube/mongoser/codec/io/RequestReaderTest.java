@@ -22,6 +22,7 @@ import com.mongodb.DBObject;
 import in.mtap.iincube.mongoser.codec.Result;
 import org.junit.Test;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
@@ -148,6 +149,18 @@ public class RequestReaderTest {
 
     @Override public int read() throws IOException {
       return source.read();
+    }
+
+    @Override public boolean isFinished() {
+      return false;
+    }
+
+    @Override public boolean isReady() {
+      return false;
+    }
+
+    @Override public void setReadListener(ReadListener readListener) {
+
     }
   }
 }

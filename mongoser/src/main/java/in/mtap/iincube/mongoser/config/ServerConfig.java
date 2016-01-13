@@ -18,9 +18,14 @@
 package in.mtap.iincube.mongoser.config;
 
 import in.mtap.iincube.mongoser.utils.Utility;
+import org.eclipse.jetty.http.HttpVersion;
+import org.eclipse.jetty.server.ConnectionFactory;
 import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
@@ -46,27 +51,28 @@ public class ServerConfig {
     threadPool = new QueuedThreadPool(noOfThreads);
   }
 
-  public Connector[] getConnectors() {
+  private ConnectionFactory getConnectionFactory() {
+    HttpConfiguration httpConfig = new HttpConfiguration();
+    httpConfig.setSendServerVersion(false);
+    httpConfig.setSecurePort(port);
+    httpConfig.setSendDateHeader(true);
+    ConnectionFactory result;
     if (ssl) {
-      SslSelectChannelConnector sslConnector = new SslSelectChannelConnector();
-      sslConnector.setStatsOn(false);
-      sslConnector.setHost(serverAddr);
-      sslConnector.setPort(port);
-      sslConnector.setThreadPool(threadPool);
-      sslConnector.setName("Simple Mongoser SSL Connector");
-      SslContextFactory sslContextFactory = sslConnector.getSslContextFactory();
-      sslContextFactory.setKeyStorePath(sslKeystore);
-      sslContextFactory.setKeyManagerPassword(sslPassword);
-      return new Connector[]{sslConnector};
+      SslContextFactory contextFactory = new SslContextFactory();
+      contextFactory.setKeyStorePath(sslKeystore);
+      contextFactory.setKeyManagerPassword(sslPassword);
+      result = new SslConnectionFactory(contextFactory, HttpVersion.HTTP_1_1.asString());
     } else {
-      SelectChannelConnector connector = new SelectChannelConnector();
-      connector.setStatsOn(false);
-      connector.setHost(serverAddr);
-      connector.setPort(port);
-      connector.setThreadPool(threadPool);
-      connector.setName("SimpleMongodb connector");
-      return new Connector[]{connector};
+      result = new HttpConnectionFactory(httpConfig);
     }
+    return result;
+  }
+
+  public Connector[] getConnectors(Server server) {
+    ServerConnector connector = new ServerConnector(server, getConnectionFactory());
+    connector.setHost(serverAddr);
+    connector.setPort(port);
+    return new Connector[] {connector};
   }
 
   public static ServerConfig extractFrom(Properties properties) {

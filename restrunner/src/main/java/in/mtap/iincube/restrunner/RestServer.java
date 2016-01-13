@@ -41,6 +41,7 @@ public class RestServer {
     final Mongoser mongoser = Mongoser.using(mongoConfig, serverConfig)
         .enableDefaultAuth()
         .enableDefaultServlets()
+        .addServlet("/errorsome", new ErrorServlet())
         .build();
 
     mongoser.start();

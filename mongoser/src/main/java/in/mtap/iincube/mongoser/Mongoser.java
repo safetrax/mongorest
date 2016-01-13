@@ -64,9 +64,7 @@ public class Mongoser {
   }
 
   public void start() throws Exception {
-    server.setSendServerVersion(false);
-
-    server.setConnectors(serverConfig.getConnectors());
+    server.setConnectors(serverConfig.getConnectors(server));
     ErrorPageErrorHandler errorHandler = new MongoserErrorHandler();
     errorHandler.addErrorPage(400, 599, "/error");
     errorHandler.setShowStacks(false);
