@@ -41,9 +41,11 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
   @Override public void handle(String target, Request baseRequest,
                      HttpServletRequest req, HttpServletResponse res) throws IOException {
     Class<?> exceptionClass = (Class<?>) req.getAttribute(Dispatcher.ERROR_EXCEPTION_TYPE);
+    Throwable throwable = (Throwable) req.getAttribute(Dispatcher.ERROR_EXCEPTION);
+
     if (exceptionClass == null) {
       LOG.warning("Unknown state for request " + req.toString());
-      baseRequest.setHandled(true);
+      writeMongoError("Unknown error", baseRequest, res);
       return;
     }
 
@@ -78,7 +80,7 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
       writeMongoError("Mongodb: " + exc.getMessage(), baseRequest, res);
       return;
     } else {
-      writeMongoError("Unhandled exception", baseRequest, res);
+      writeMongoError(throwable.getMessage(), baseRequest, res);
       return;
     }
   }
