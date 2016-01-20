@@ -100,6 +100,22 @@ public class ReadRequestHandlerTest {
     verifyNoMoreInteractions(response);
   }
 
+  @Test public void errorIfReadProxyDidNotAllow() throws Exception {
+    when(reader.getCollectionName()).thenReturn("colname");
+    when(reader.getDbName()).thenReturn("dbname");
+    ReadRequestHandler readRequestHandler = new ReadRequestHandler(null,
+        new ReadRequestHandler.ReadProxy() {
+          @Override public boolean isNamespaceAllowed(String dbname, String colname) {
+            return false;
+          }
+        });
+    readRequestHandler.process(reader, response);
+
+    verify(response).send(HttpServletResponse.SC_BAD_REQUEST,
+        Status.get("Not allowed to read this namespace").toJsonTree());
+    verifyNoMoreInteractions(response);
+  }
+
   @Test public void parseErrorOnInputStream() throws Exception {
     when(reader.getCollectionName()).thenReturn("colname");
     when(reader.getDbName()).thenReturn("dbname");

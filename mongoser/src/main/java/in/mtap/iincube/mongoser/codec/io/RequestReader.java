@@ -107,12 +107,12 @@ public class RequestReader {
    */
   public Result<List<DBObject>> readResultDbObject() {
     try {
-      Result<List<DBObject>> result = new Result<List<DBObject>>(decodeAsDBObject(), true,
+      Result<List<DBObject>> result = new Result<>(decodeAsDBObject(), true,
           requestBody.toString());
       requestBody.setLength(0);
       return result;
     } catch (Exception e) {
-      return new Result<List<DBObject>>(null, false);
+      return new Result<>(null, false);
     }
   }
 
