@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -81,6 +82,16 @@ public class JsonArrayDecoderTest {
     } catch (IllegalArgumentException e) {
       assertThat(e).hasMessage("Parse error invalid json: \n" + invalidJson);
     }
+  }
+
+  @Test public void readRegexInput() throws IOException {
+    StringWriter out = new StringWriter();
+    JsonWriter jsonWriter = new JsonWriter(out);
+    jsonWriter.beginObject().name("firstName").beginObject()
+        .name("$regex").value("hello").endObject().endObject();
+    jsonArrayDecoder.addData(out.toString());
+    jsonArrayDecoder.getAsDBObject();
+    assertThat(jsonArrayDecoder.isValid()).isTrue();
   }
 
   @Test public void invalidWhenNoData() {

@@ -17,7 +17,6 @@
 
 package in.mtap.iincube.mongoser;
 
-import com.mongodb.MongoException;
 import in.mtap.iincube.mongoser.model.Status;
 import org.eclipse.jetty.server.Dispatcher;
 import org.eclipse.jetty.server.Request;
@@ -64,20 +63,6 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
       w.println(st.toJson());
       w.flush();
       baseRequest.setHandled(true);
-      return;
-    } else if (MongoException.Network.class.equals(exceptionClass)) {
-      writeMongoError("Mongodb server down or can not be reached", baseRequest, res);
-      return;
-    } else if (MongoException.CursorNotFound.class.equals(exceptionClass)) {
-      writeMongoError("Mongodb: cursor not found", baseRequest, res);
-      return;
-    } else if (MongoException.DuplicateKey.class.equals(exceptionClass)) {
-      writeMongoError("Mongodb: duplicate key", baseRequest, res);
-      return;
-    } else if (exceptionClass != null
-        && "com.mongodb.CommandResult$CommandFailure".equals(exceptionClass.getName())) {
-      Exception exc = (Exception) req.getAttribute(Dispatcher.ERROR_EXCEPTION);
-      writeMongoError("Mongodb: " + exc.getMessage(), baseRequest, res);
       return;
     } else {
       writeMongoError(throwable.getMessage(), baseRequest, res);
