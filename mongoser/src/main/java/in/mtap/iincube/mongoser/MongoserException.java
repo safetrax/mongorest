@@ -24,6 +24,7 @@ public class MongoserException extends RuntimeException {
   private final Status status;
 
   public MongoserException(int code, Status status) {
+    super("Error code [" + code + "] " + status.getMessage());
     this.code = code;
     this.status = status;
   }

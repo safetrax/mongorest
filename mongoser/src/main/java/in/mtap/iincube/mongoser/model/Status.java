@@ -36,6 +36,10 @@ public class Status {
     return new Status(status);
   }
 
+  public String getMessage() {
+    return status;
+  }
+
   public String toJson() {
     return GSON.toJson(this);
   }

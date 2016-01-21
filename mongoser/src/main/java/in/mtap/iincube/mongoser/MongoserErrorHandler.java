@@ -17,9 +17,7 @@
 
 package in.mtap.iincube.mongoser;
 
-import com.mongodb.MongoException;
 import in.mtap.iincube.mongoser.model.Status;
-import org.eclipse.jetty.server.AbstractHttpConnection;
 import org.eclipse.jetty.server.Dispatcher;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
@@ -42,7 +40,15 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
   @Override public void handle(String target, Request baseRequest,
                      HttpServletRequest req, HttpServletResponse res) throws IOException {
     Class<?> exceptionClass = (Class<?>) req.getAttribute(Dispatcher.ERROR_EXCEPTION_TYPE);
-    LOG.fine("handling error type: " + exceptionClass.getSimpleName());
+    Throwable throwable = (Throwable) req.getAttribute(Dispatcher.ERROR_EXCEPTION);
+
+    if (exceptionClass == null) {
+      LOG.warning("Unknown state for request " + req.toString());
+      writeMongoError("Unknown error", baseRequest, res);
+      return;
+    }
+
+    LOG.info("handling error type: " + exceptionClass.getSimpleName());
     if (MongoserException.class.equals(exceptionClass)) {
       MongoserException exception = (MongoserException) req.getAttribute(Dispatcher.ERROR_EXCEPTION);
 
@@ -56,30 +62,15 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
       PrintWriter w = res.getWriter();
       w.println(st.toJson());
       w.flush();
-      AbstractHttpConnection.getCurrentConnection().getRequest().setHandled(true);
-      return;
-    } else if (MongoException.Network.class.equals(exceptionClass)) {
-      writeMongoError("Mongodb server down or can not be reached", res);
-      return;
-    } else if (MongoException.CursorNotFound.class.equals(exceptionClass)) {
-      writeMongoError("Mongodb: cursor not found", res);
-      return;
-    } else if (MongoException.DuplicateKey.class.equals(exceptionClass)) {
-      writeMongoError("Mongodb: duplicate key", res);
-      return;
-    } else if (exceptionClass != null
-        && "com.mongodb.CommandResult$CommandFailure".equals(exceptionClass.getName())) {
-      Exception exc = (Exception) req.getAttribute(Dispatcher.ERROR_EXCEPTION);
-      writeMongoError("Mongodb: " + exc.getMessage(), res);
+      baseRequest.setHandled(true);
       return;
     } else {
-      writeMongoError("Unhandled exception", res);
+      writeMongoError(throwable.getMessage(), baseRequest, res);
       return;
     }
-    // super.handle(target, baseRequest, req, res);
   }
 
-  private void writeMongoError(String msg, HttpServletResponse res)
+  private void writeMongoError(String msg, Request baseRequest, HttpServletResponse res)
       throws IOException {
     res.setContentType("application/json;charset=UTF-8");
     res.setStatus(SC_BAD_REQUEST);
@@ -89,7 +80,6 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
     PrintWriter w = res.getWriter();
     w.println(st.toJson());
     w.flush();
-    AbstractHttpConnection.getCurrentConnection().getRequest().setHandled(true);
+    baseRequest.setHandled(true);
   }
-
 }

@@ -7,7 +7,7 @@ public class Utility {
       error(message);
   }
 
-  /** @throw IllegalArgument exception */
+  /** @throws IllegalArgumentException exception */
   public static void error(String msg) {
     throw new IllegalArgumentException(msg);
   }

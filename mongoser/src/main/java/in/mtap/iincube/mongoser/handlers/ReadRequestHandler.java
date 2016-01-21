@@ -39,10 +39,16 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 public class ReadRequestHandler {
   static final String INVALID_LIMIT_SKIP = "skip or limit param is invalid";
   private final DocumentClient documentClient;
+  private final ReadProxy readProxy;
   private final JsonEncoder jsonEncoder = new JsonEncoder();
 
   public ReadRequestHandler(DocumentClient documentClient) {
+    this(documentClient, ReadProxy.NONE);
+  }
+
+  public ReadRequestHandler(DocumentClient documentClient, ReadProxy readProxy) {
     this.documentClient = documentClient;
+    this.readProxy = readProxy;
   }
 
   /**
@@ -53,6 +59,12 @@ public class ReadRequestHandler {
     if (!hasValidParams(requestReader)) {
       responseWriter.send(SC_BAD_REQUEST,
           Status.get(MISSING_DB_COL_PARAMS).toJsonTree());
+      return;
+    }
+
+    if (!readProxy.isNamespaceAllowed(requestReader.getDbName(), requestReader.getDbName())) {
+      responseWriter.send(SC_BAD_REQUEST,
+          Status.get("Not allowed to read this namespace").toJsonTree());
       return;
     }
     int skip = -1;
@@ -93,7 +105,7 @@ public class ReadRequestHandler {
     if (queryData.size() > 1)
       mongoReader.sort(queryData.get(1));
     try {
-      responseWriter.send(SC_OK, mongoReader.query(jsonEncoder));
+      responseWriter.send(SC_OK, mongoReader.execute(jsonEncoder));
     } catch (IllegalArgumentException e) {
       throw new MongoserException(400,
           Status.get(" Error message: " + e.getMessage()
@@ -101,4 +113,13 @@ public class ReadRequestHandler {
     }
   }
 
+  public interface ReadProxy {
+    boolean isNamespaceAllowed(String dbname, String colname);
+
+    ReadProxy NONE = new ReadProxy() {
+      @Override public boolean isNamespaceAllowed(String dbname, String colname) {
+        return true;
+      }
+    };
+  }
 }

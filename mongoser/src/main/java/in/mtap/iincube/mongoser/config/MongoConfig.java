@@ -18,7 +18,7 @@
 package in.mtap.iincube.mongoser.config;
 
 import com.mongodb.Mongo;
-import com.mongodb.MongoOptions;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
 import in.mtap.iincube.mongoapi.MongoClient;
 
@@ -71,16 +71,16 @@ public class MongoConfig {
       return mongo;
     try {
       List<ServerAddress> serverAddresses = toAddress(servers);
-      MongoOptions opts = new MongoOptions();
-      opts.autoConnectRetry = true;
+      MongoClientOptions.Builder opts = new MongoClientOptions.Builder();
+
       if (threadNo < 100) {
-        opts.connectionsPerHost = threadNo;
+        opts.connectionsPerHost(threadNo);
       } else {
-        opts.connectionsPerHost = 100;
+        opts.connectionsPerHost(100);
       }
-      opts.threadsAllowedToBlockForConnectionMultiplier = 10;
-      opts.maxWaitTime = 10000;
-      mongo = new Mongo(serverAddresses, opts);
+      opts.threadsAllowedToBlockForConnectionMultiplier(10);
+      opts.maxWaitTime(10000);
+      mongo = new com.mongodb.MongoClient(serverAddresses, opts.build());
       return mongo;
     } catch (UnknownHostException e) {
       throw new IllegalArgumentException("Unknown host : " + servers);
