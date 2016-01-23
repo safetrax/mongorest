@@ -37,9 +37,15 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 public class WriteRequestHandler {
   private final DocumentClient documentClient;
+  private final RequestInterceptor interceptor;
 
   public WriteRequestHandler(DocumentClient documentClient) {
+    this(documentClient, RequestInterceptor.ALLOW_ALL);
+  }
+
+  public WriteRequestHandler(DocumentClient documentClient, RequestInterceptor interceptor) {
     this.documentClient = documentClient;
+    this.interceptor = interceptor;
   }
 
   /**

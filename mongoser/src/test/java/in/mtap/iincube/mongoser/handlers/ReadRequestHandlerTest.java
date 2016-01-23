@@ -104,9 +104,13 @@ public class ReadRequestHandlerTest {
     when(reader.getCollectionName()).thenReturn("colname");
     when(reader.getDbName()).thenReturn("dbname");
     ReadRequestHandler readRequestHandler = new ReadRequestHandler(null,
-        new ReadRequestHandler.ReadProxy() {
-          @Override public boolean isNamespaceAllowed(String dbname, String colname) {
+        new RequestInterceptor() {
+          @Override public boolean isReadAllowed(String dbName, String colname) {
             return false;
+          }
+
+          @Override public boolean isWriteAllowed(String dbName, String colname) {
+            throw new AssertionError("Inappropriate call on read handler");
           }
         });
     readRequestHandler.process(reader, response);
