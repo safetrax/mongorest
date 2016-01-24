@@ -20,6 +20,7 @@ package in.mtap.iincube.mongoapi;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 import static in.mtap.iincube.mongoapi.internal.Utility.assertNotNull;
 
@@ -54,8 +55,9 @@ public class MongoUpdater {
     return this;
   }
 
-  public void execute() {
-    execute(null);
+  /** Uses {@link WriteConcern#JOURNALED} */
+  public WriteResult execute() {
+    return execute(WriteConcern.JOURNALED);
   }
 
   private void assertArguments() {
@@ -63,13 +65,9 @@ public class MongoUpdater {
     assertNotNull(updateObject, "updateObject == null");
   }
 
-  public void execute(WriteConcern writeConcern) {
+  public WriteResult execute(WriteConcern writeConcern) {
     assertArguments();
     DBCollection collection = collectionFactory.get();
-    if (writeConcern != null) {
-      collection.update(findObject, updateObject, multi, upsert, writeConcern);
-    } else {
-      collection.update(findObject, updateObject, multi, upsert);
-    }
+    return collection.update(findObject, updateObject, multi, upsert, writeConcern);
   }
 }
