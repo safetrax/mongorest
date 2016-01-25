@@ -50,8 +50,8 @@ public class MongoWriter {
   }
 
   /** Uses {@link WriteConcern#JOURNALED} */
-  public void execute() {
-    execute(WriteConcern.JOURNALED);
+  public WriteResult execute() {
+    return execute(WriteConcern.JOURNALED);
   }
 
   public WriteResult execute(WriteConcern writeConcern) {
