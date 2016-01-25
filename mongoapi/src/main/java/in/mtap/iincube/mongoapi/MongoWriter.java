@@ -20,6 +20,7 @@ package in.mtap.iincube.mongoapi;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,15 +49,15 @@ public class MongoWriter {
     assertNotNull(dbObjects, "dbObject == null");
   }
 
-  /** Uses {@link WriteConcern#FSYNC_SAFE} */
+  /** Uses {@link WriteConcern#JOURNALED} */
   public void execute() {
-    execute(WriteConcern.FSYNC_SAFE);
+    execute(WriteConcern.JOURNALED);
   }
 
-  public void execute(WriteConcern writeConcern) {
+  public WriteResult execute(WriteConcern writeConcern) {
     assertArguments();
     assertNotNull(writeConcern, "WriteConcern == null");
     DBCollection collection = collectionFactory.get();
-    collection.insert(dbObjects, writeConcern);
+    return collection.insert(dbObjects, writeConcern);
   }
 }

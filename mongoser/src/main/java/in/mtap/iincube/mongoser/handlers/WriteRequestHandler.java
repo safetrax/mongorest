@@ -75,8 +75,8 @@ public class WriteRequestHandler {
       responseWriter.send(SC_BAD_REQUEST, Status.get(MISSING_DB_COL_PARAMS).toJsonTree());
       return;
     }
-    boolean upsert = requestReader.getAsBoolean("upsert");
-    boolean multi = requestReader.getAsBoolean("multi");
+    boolean upsert = requestReader.getParameterAsBoolean("upsert");
+    boolean multi = requestReader.getParameterAsBoolean("multi");
     Result<List<DBObject>> dataResult = requestReader.readResultDbObject();
     if (!dataResult.isValid()) {
       responseWriter.send(SC_BAD_REQUEST, Status.get(PARSE_ERROR).toJsonTree());
