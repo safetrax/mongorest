@@ -39,16 +39,16 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 public class ReadRequestHandler {
   static final String INVALID_LIMIT_SKIP = "skip or limit param is invalid";
   private final DocumentClient documentClient;
-  private final ReadProxy readProxy;
+  private final RequestInterceptor interceptor;
   private final JsonEncoder jsonEncoder = new JsonEncoder();
 
   public ReadRequestHandler(DocumentClient documentClient) {
-    this(documentClient, ReadProxy.NONE);
+    this(documentClient, RequestInterceptor.ALLOW_ALL);
   }
 
-  public ReadRequestHandler(DocumentClient documentClient, ReadProxy readProxy) {
+  public ReadRequestHandler(DocumentClient documentClient, RequestInterceptor interceptor) {
     this.documentClient = documentClient;
-    this.readProxy = readProxy;
+    this.interceptor = interceptor;
   }
 
   /**
@@ -62,7 +62,7 @@ public class ReadRequestHandler {
       return;
     }
 
-    if (!readProxy.isNamespaceAllowed(requestReader.getDbName(), requestReader.getDbName())) {
+    if (!interceptor.isReadAllowed(requestReader.getDbName(), requestReader.getDbName())) {
       responseWriter.send(SC_BAD_REQUEST,
           Status.get("Not allowed to read this namespace").toJsonTree());
       return;
