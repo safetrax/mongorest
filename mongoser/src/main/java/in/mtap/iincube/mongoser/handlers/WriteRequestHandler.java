@@ -69,7 +69,7 @@ public class WriteRequestHandler {
         requestReader.getCollectionName());
     mongoWriter.insert(resultData.getData());
     mongoWriter.execute();
-    response.send(SC_OK, Status.get("success").toJsonTree());
+    response.send(SC_OK, Status.OK.toJsonTree());
   }
 
   /**
@@ -105,6 +105,6 @@ public class WriteRequestHandler {
         requestReader.getCollectionName());
     updater.find(dbObjects.get(0)).update(dbObjects.get(1)).multi(multi).upsert(upsert);
     updater.execute();
-    responseWriter.send(SC_OK, Status.get("created").toJsonTree());
+    responseWriter.send(SC_OK, Status.OK.toJsonTree());
   }
 }

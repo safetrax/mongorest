@@ -3,7 +3,6 @@ apply plugin: 'application'
 
 mainClassName = 'in.mtap.iincube.restrunner.RestServer'
 
-sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
