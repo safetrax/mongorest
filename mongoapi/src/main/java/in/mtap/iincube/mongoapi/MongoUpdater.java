@@ -68,6 +68,6 @@ public class MongoUpdater {
   public WriteResult execute(WriteConcern writeConcern) {
     assertArguments();
     DBCollection collection = collectionFactory.get();
-    return collection.update(findObject, updateObject, multi, upsert, writeConcern);
+    return collection.update(findObject, updateObject, upsert, multi, writeConcern);
   }
 }
