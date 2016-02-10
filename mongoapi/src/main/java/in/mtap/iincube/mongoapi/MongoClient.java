@@ -44,7 +44,7 @@ public final class MongoClient implements DocumentClient, FsClient, SuperDocumen
    * <p>
    * Note: Does not performs connect
    *
-   * @see {@link #MongoClient(com.mongodb.MongoClient)}
+   * @see #MongoClient(com.mongodb.MongoClient)
    */
   public MongoClient(com.mongodb.MongoClient mongoClient) {
     this.mongo = mongoClient;
