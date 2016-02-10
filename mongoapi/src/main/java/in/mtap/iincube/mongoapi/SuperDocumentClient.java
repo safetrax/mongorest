@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,16 +17,7 @@
 
 package in.mtap.iincube.mongoapi;
 
-import com.mongodb.Mongo;
-
-class GridFsUpdater extends GridFsRequestBuilder<Boolean> {
-
-  GridFsUpdater(Mongo mongo, String dbname, String bucketname) {
-    super(mongo, dbname, bucketname);
-  }
-
-  @Override public Boolean execute() {
-
-    return false;
-  }
+/** Same as {@link DocumentClient} with an additional delete contract */
+public interface SuperDocumentClient extends DocumentClient {
+  MongoDeleter remover(String dbname, String colname);
 }

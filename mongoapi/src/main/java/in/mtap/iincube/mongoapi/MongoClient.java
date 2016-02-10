@@ -22,21 +22,32 @@ import com.mongodb.gridfs.GridFSDBFile;
 
 /**
  * A wrapper class for Mongo client java driver.
- *<p>
+ * <p>
  * For MongoDB read request the api uses {@link DBObjectEncoder} to encode each cursor result.
  * For example getting the result in json
  */
-public final class MongoClient implements DocumentClient, FsClient {
+public final class MongoClient implements DocumentClient, FsClient, SuperDocumentClient {
 
   private final Mongo mongo;
+
+  /**
+   * Will be removed in next major release
+   *
+   * Instead use {@link #MongoClient(com.mongodb.MongoClient)}
+   */
+  @Deprecated public MongoClient(Mongo mongo) {
+    this.mongo = mongo;
+  }
 
   /**
    * Accepts {@link Mongo} object that is already connected to the mongo server.
    * <p>
    * Note: Does not performs connect
+   *
+   * @see #MongoClient(com.mongodb.MongoClient)
    */
-  public MongoClient(Mongo mongo) {
-    this.mongo = mongo;
+  public MongoClient(com.mongodb.MongoClient mongoClient) {
+    this.mongo = mongoClient;
   }
 
   @Override public MongoReader read(String dbname, String colname) {
@@ -49,6 +60,10 @@ public final class MongoClient implements DocumentClient, FsClient {
 
   @Override public MongoWriter write(String dbname, String colname) {
     return new MongoWriter(new MongoCollectionFactory(mongo, dbname, colname));
+  }
+
+  @Override public MongoDeleter remover(String dbname, String colname) {
+    return new MongoDeleter(new MongoCollectionFactory(mongo, dbname, colname));
   }
 
   @Override public GridFsRequestBuilder<Boolean> gridFsUpdate(String dbname, String bucketname) {
