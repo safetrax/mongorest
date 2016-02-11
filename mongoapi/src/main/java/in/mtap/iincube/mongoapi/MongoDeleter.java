@@ -29,17 +29,17 @@ public class MongoDeleter {
     this.collectionFactory = collectionFactory;
   }
 
-  MongoDeleter find(DBObject dbObject) {
+  public MongoDeleter find(DBObject dbObject) {
     this.dbObject = dbObject;
     return this;
   }
 
-  WriteResult execute() {
+  public WriteResult execute() {
     return collectionFactory.get().remove(dbObject);
   }
 
   /** @return the dbobject the of the document that is deleted */
-  DBObject findAndRemove(DBObject dbObject) {
+  public DBObject findAndRemove(DBObject dbObject) {
     return collectionFactory.get().findAndRemove(dbObject);
   }
 }
