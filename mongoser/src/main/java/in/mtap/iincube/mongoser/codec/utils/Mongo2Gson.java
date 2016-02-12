@@ -2,6 +2,7 @@ package in.mtap.iincube.mongoser.codec.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mongodb.BasicDBList;
@@ -109,8 +110,10 @@ public final class Mongo2Gson {
       JsonObject idObject = new JsonObject();
       idObject.addProperty("$oid", value.toString());
       return idObject;
-    } else {
+    } else if (value != null) {
       return new JsonPrimitive("Unsupported data type: " + value.getClass().getSimpleName());
+    } else {
+      return JsonNull.INSTANCE;
     }
   }
 }
