@@ -94,6 +94,10 @@ public final class Mongo2Gson {
    * @return JsonElement
    */
   public static JsonElement getAsJsonPrimitive(Object value, String key) {
+    if (value == null) {
+      return JsonNull.INSTANCE;
+    }
+
     if (value instanceof String) {
       return new JsonPrimitive((String) value);
     } else if (value instanceof Character) {
@@ -110,10 +114,8 @@ public final class Mongo2Gson {
       JsonObject idObject = new JsonObject();
       idObject.addProperty("$oid", value.toString());
       return idObject;
-    } else if (value != null) {
-      return new JsonPrimitive("Unsupported data type: " + value.getClass().getSimpleName());
     } else {
-      return JsonNull.INSTANCE;
+      return new JsonPrimitive("Unsupported data type: " + value.getClass().getSimpleName());
     }
   }
 }
