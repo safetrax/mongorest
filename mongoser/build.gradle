@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
     compile libraries.mongoapi
-    compile libraries.gson
+    provided libraries.gson
     compile libraries.javaxServlet
     compile libraries.apacheCommons
 

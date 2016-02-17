@@ -4,6 +4,13 @@ buildscript {
     }
 }
 
+allprojects {
+    configurations {
+        provided
+        compile.extendsFrom provided
+    }
+}
+
 ext {
     versionCode = 1
     versionName = "1.0"

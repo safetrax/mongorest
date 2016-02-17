@@ -2,6 +2,7 @@ package in.mtap.iincube.mongoser.codec.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mongodb.BasicDBList;
@@ -93,6 +94,10 @@ public final class Mongo2Gson {
    * @return JsonElement
    */
   public static JsonElement getAsJsonPrimitive(Object value, String key) {
+    if (value == null) {
+      return JsonNull.INSTANCE;
+    }
+
     if (value instanceof String) {
       return new JsonPrimitive((String) value);
     } else if (value instanceof Character) {
