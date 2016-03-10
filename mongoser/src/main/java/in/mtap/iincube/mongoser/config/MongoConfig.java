@@ -17,7 +17,6 @@
 
 package in.mtap.iincube.mongoser.config;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
 import in.mtap.iincube.mongoapi.MongoClient;
