@@ -75,6 +75,8 @@ public class ServerConfig {
     return new Connector[] {connector};
   }
 
+  /** use {@link ServerConfig.Builder } instead */
+  @Deprecated
   public static ServerConfig extractFrom(Properties properties) {
     String serverAddr = properties.getProperty("server.adr", null);
     int port = Utility.toInt(properties.getProperty("server.port"), 8080);
@@ -89,5 +91,50 @@ public class ServerConfig {
     boolean serverAuthEnable = Boolean.parseBoolean(properties.getProperty("auth", "false"));
     return new ServerConfig(serverAddr, port, noOfThreads, ssl, sslKeystore,
         sslPassword, serverAuthEnable);
+  }
+
+  public static class Builder {
+    private final int port;
+    private final String serverAddr;
+    private int threadNo = 50;
+    private boolean enableSsl;
+    private String keystore;
+    private String password;
+    private boolean enableServerAuth;
+
+    public Builder(int port) {
+      this(null, port);
+    }
+
+    public Builder(String serverAddr, int port) {
+      this.serverAddr = serverAddr;
+      this.port = port;
+    }
+
+    public Builder serverThreadNo(int threadNo) {
+      this.threadNo = threadNo;
+      return this;
+    }
+
+    public Builder enableSsl(boolean enableSsl) {
+      this.enableSsl = enableSsl;
+      return this;
+    }
+
+    public Builder sslKeystoreAndPassword(String keystore, String password) {
+      this.keystore = keystore;
+      this.password = password;
+      return this;
+    }
+
+    public Builder enableServerAuth(boolean enableServerAuth) {
+      this.enableServerAuth = enableServerAuth;
+      return this;
+    }
+
+    public ServerConfig build() {
+      return new ServerConfig(serverAddr, port, threadNo, enableSsl,
+          keystore, password, enableServerAuth);
+    }
   }
 }

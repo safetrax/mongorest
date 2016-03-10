@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'in.mtap.iincube.restrunner.RestServer'
+mainClassName = 'in.mtap.iincube.restrunner.Main'
 
 version = '1.0'
 
@@ -9,8 +9,16 @@ repositories {
     mavenCentral()
 }
 
+/* gradle run -Dexec.args="arg1 arg2 arg3" */
+task execute (type: JavaExec) {
+    main = mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    args System.getProperty('exec.args').split()
+}
+
 dependencies {
     compile libraries.mongoser
+    compile 'io.airlift:airline:0.7'
     testCompile libraries.junit
 }
 

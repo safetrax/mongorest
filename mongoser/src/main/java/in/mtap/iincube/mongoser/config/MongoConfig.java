@@ -35,7 +35,7 @@ public class MongoConfig {
   private final boolean removeIdField;
   private final boolean gridFsEnable;
   private final int threadNo;
-  private Mongo mongo;
+  private com.mongodb.MongoClient mongo;
   private MongoClient mongoClient;
 
   public MongoConfig(String servers, boolean safeOperations, boolean removeIdField,
@@ -66,7 +66,7 @@ public class MongoConfig {
     return serverAddresses;
   }
 
-  private Mongo getMongo() {
+  private com.mongodb.MongoClient getMongo() {
     if (mongo != null)
       return mongo;
     try {
@@ -96,7 +96,8 @@ public class MongoConfig {
     return mongoClient;
   }
 
-  public static MongoConfig extractFrom(Properties properties) {
+  /** Use {@link MongoConfig.Builder} instead */
+  @Deprecated public static MongoConfig extractFrom(Properties properties) {
     String servers = properties.getProperty("mongo.servers", "127.0.0.1:27017");
     boolean safeOperations = Boolean.parseBoolean(
         properties.getProperty("mongo.safeoperations", "false"));
@@ -105,5 +106,41 @@ public class MongoConfig {
     boolean gridfs = Boolean.parseBoolean(properties.getProperty("gridfs", "false"));
     int serverThreadNo = toInt(properties.getProperty("server.threadsno"), 50);
     return new MongoConfig(servers, safeOperations, removeIdFields, gridfs, serverThreadNo);
+  }
+
+  public static class Builder {
+    private final String servers;
+    private boolean safeOperation;
+    private boolean removeIdField;
+    private boolean enableGridFs;
+    private int serverThreadNo = 50;
+
+    public Builder(String servers) {
+      this.servers = servers;
+    }
+
+    public Builder withSafeOperation(boolean safeOperation) {
+      this.safeOperation = safeOperation;
+      return this;
+    }
+
+    public Builder removeIdField(boolean removeIdField) {
+      this.removeIdField = removeIdField;
+      return this;
+    }
+
+    public Builder enableGridFs(boolean enableGridFs) {
+      this.enableGridFs = enableGridFs;
+      return this;
+    }
+
+    public Builder serverThreadNo(int serverThreadNo) {
+      this.serverThreadNo = serverThreadNo;
+      return this;
+    }
+
+    public MongoConfig build() {
+      return new MongoConfig(servers, safeOperation, removeIdField, enableGridFs, serverThreadNo);
+    }
   }
 }
