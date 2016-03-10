@@ -49,16 +49,10 @@ public class Main extends HelpOption implements Runnable {
   }
 
   public MongoConfig getMongoConfig() {
-    if (mongoServer == null || mongoServer.trim().length() == 0) {
-      mongoServer = "127.0.0.1";
-    }
     return new MongoConfig.Builder(mongoServer).build();
   }
 
   public ServerConfig getServerConfig() {
-    if (portNo <= 0) {
-      portNo = 8081;
-    }
     return new ServerConfig.Builder(portNo).build();
   }
 
