@@ -34,6 +34,7 @@ final class PlainWriter extends OutWriter {
   }
 
   @Override protected void writeTo(HttpServletResponse response) throws IOException {
+    super.writeTo(response);
     PrintWriter writer = response.getWriter();
     writer.write(message.toString());
     writer.flush();

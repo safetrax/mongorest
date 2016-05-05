@@ -32,6 +32,7 @@ final class GridfsWriter extends OutWriter {
   }
 
   @Override protected void writeTo(HttpServletResponse response) throws IOException {
+    super.writeTo(response);
     OutputStream outStream = response.getOutputStream();
     response.setHeader("Content-Disposition", "attachment;filename=" + file.getFilename());
     response.setContentType(file.getContentType());
