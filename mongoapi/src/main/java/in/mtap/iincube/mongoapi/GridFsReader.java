@@ -33,6 +33,6 @@ class GridFsReader extends GridFsRequestBuilder<GridFSDBFile> {
   }
 
   @Override public GridFSDBFile execute() throws IllegalArgumentException {
-    return null;
+    return getGridFs().findOne(filename);
   }
 }
