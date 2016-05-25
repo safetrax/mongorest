@@ -19,6 +19,7 @@ package in.mtap.iincube.mongoapi;
 
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
+import com.mongodb.gridfs.GridFS;
 
 import static in.mtap.iincube.mongoapi.internal.Utility.assertNotNull;
 
@@ -42,5 +43,9 @@ class MongoCollectionFactory implements MongoObjectFactory<DBCollection> {
 
   @Override public DBCollection get() {
     return mongo.getDB(dbname).getCollection(colname);
+  }
+
+  public GridFS getGridFs() {
+    return new GridFS(mongo.getDB(dbname), colname);
   }
 }

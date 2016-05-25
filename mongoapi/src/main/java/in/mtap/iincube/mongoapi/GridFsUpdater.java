@@ -18,6 +18,8 @@
 package in.mtap.iincube.mongoapi;
 
 import com.mongodb.Mongo;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSInputFile;
 
 class GridFsUpdater extends GridFsRequestBuilder<Boolean> {
 
@@ -26,7 +28,12 @@ class GridFsUpdater extends GridFsRequestBuilder<Boolean> {
   }
 
   @Override public Boolean execute() {
-
-    return false;
+    GridFS gridFS = getGridFs();
+    gridFS.remove(filename);
+    GridFSInputFile file = gridFS.createFile(stream);
+    file.setContentType(contentType);
+    file.setFilename(filename);
+    file.save();
+    return true;
   }
 }

@@ -18,6 +18,7 @@
 package in.mtap.iincube.mongoapi;
 
 import com.mongodb.Mongo;
+import com.mongodb.gridfs.GridFS;
 
 import java.io.InputStream;
 
@@ -48,6 +49,10 @@ public abstract class GridFsRequestBuilder<T> {
   public GridFsRequestBuilder<T> filestream(InputStream stream) {
     this.stream = stream;
     return this;
+  }
+
+  protected GridFS getGridFs() {
+    return new GridFS(mongo.getDB(dbname), bucketname);
   }
 
   public abstract T execute() throws IllegalArgumentException;
