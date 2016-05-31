@@ -17,6 +17,7 @@
 
 package in.mtap.iincube.mongoser.handlers;
 
+import com.google.gson.Gson;
 import com.mongodb.DBObject;
 import in.mtap.iincube.mongoapi.DocumentClient;
 import in.mtap.iincube.mongoapi.MongoUpdater;
@@ -27,6 +28,7 @@ import in.mtap.iincube.mongoser.codec.io.Response;
 import in.mtap.iincube.mongoser.model.Status;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static in.mtap.iincube.mongoser.handlers.DbRequestHandler.MISSING_DB_COL_PARAMS;
@@ -46,6 +48,14 @@ public class WriteRequestHandler {
   public WriteRequestHandler(DocumentClient documentClient, RequestInterceptor interceptor) {
     this.documentClient = documentClient;
     this.interceptor = interceptor;
+  }
+
+  private String[] getStringIds(List<DBObject> dbObjects) {
+    List<String> result = new ArrayList<>(dbObjects.size());
+    for (DBObject dbObject : dbObjects) {
+      result.add(dbObject.get("_id").toString());
+    }
+    return result.toArray(new String[result.size()]);
   }
 
   /**
@@ -69,7 +79,7 @@ public class WriteRequestHandler {
         requestReader.getCollectionName());
     mongoWriter.insert(resultData.getData());
     mongoWriter.execute();
-    response.send(SC_OK, Status.OK.toJsonTree());
+    response.send(SC_OK, new Gson().toJsonTree(getStringIds(resultData.getData())));
   }
 
   /**
