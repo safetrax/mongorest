@@ -70,7 +70,7 @@ public class ReadRequestHandler {
       return;
     }
     if (requestReader.hasParam("distinct")) {
-
+      processDistinctRequest(requestReader, responseWriter);
     } else {
       processFindRequest(requestReader, responseWriter);
     }
@@ -148,7 +148,6 @@ public class ReadRequestHandler {
               + " Invalid request " + resultData.getPlainBody()));
     }
   }
-
 
   public interface ReadProxy {
     boolean isNamespaceAllowed(String dbname, String colname);
