@@ -17,6 +17,8 @@
 
 package in.mtap.iincube.mongoser.handlers;
 
+import com.google.gson.Gson;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import in.mtap.iincube.mongoapi.DocumentClient;
 import in.mtap.iincube.mongoapi.MongoReader;
@@ -67,6 +69,15 @@ public class ReadRequestHandler {
           Status.get("Not allowed to read this namespace").toJsonTree());
       return;
     }
+    if (requestReader.hasParam("distinct")) {
+      processDistinctRequest(requestReader, responseWriter);
+    } else {
+      processFindRequest(requestReader, responseWriter);
+    }
+  }
+
+  private void processFindRequest(RequestReader requestReader, Response responseWriter)
+      throws IOException {
     int skip = -1;
     int limit = -1;
     try {
@@ -106,6 +117,31 @@ public class ReadRequestHandler {
       mongoReader.sort(queryData.get(1));
     try {
       responseWriter.send(SC_OK, mongoReader.execute(jsonEncoder));
+    } catch (IllegalArgumentException e) {
+      throw new MongoserException(400,
+          Status.get(" Error message: " + e.getMessage()
+              + " Invalid request " + resultData.getPlainBody()));
+    }
+  }
+
+  private void processDistinctRequest(RequestReader requestReader, Response responseWriter)
+      throws  IOException {
+    String distinctKey = requestReader.getUrlParameter("distinct");
+
+    Result<List<DBObject>> resultData = requestReader.readResultDbObject();
+    if (!resultData.isValid()) {
+      responseWriter.send(SC_BAD_REQUEST, Status.get(PARSE_ERROR).toJsonTree());
+      return;
+    }
+
+    MongoReader mongoReader = documentClient.read(requestReader.getDbName(),
+        requestReader.getCollectionName());
+
+    List<DBObject> queryData = resultData.getData();
+    mongoReader.find((queryData.size() > 0) ? queryData.get(0) : new BasicDBObject());
+
+    try {
+      responseWriter.send(SC_OK, new Gson().toJsonTree(mongoReader.distinct(distinctKey)));
     } catch (IllegalArgumentException e) {
       throw new MongoserException(400,
           Status.get(" Error message: " + e.getMessage()
