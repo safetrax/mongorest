@@ -10,8 +10,10 @@ dependencies {
     compile libraries.javaxServlet
     compile libraries.apacheCommons
 
-    compile 'org.eclipse.jetty:jetty-server:9.3.6.v20151106'
-    compile 'org.eclipse.jetty:jetty-servlet:9.3.6.v20151106'
+    // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.10.v20180503'
+    // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-servlet
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.10.v20180503'
 
     testCompile libraries.junit
     testCompile libraries.googleTruth

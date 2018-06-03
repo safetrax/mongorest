@@ -61,7 +61,7 @@ public class ServerConfig {
       SslContextFactory contextFactory = new SslContextFactory();
       contextFactory.setKeyStorePath(sslKeystore);
       contextFactory.setKeyManagerPassword(sslPassword);
-      result = new SslConnectionFactory(contextFactory, HttpVersion.HTTP_1_1.asString());
+      result = new SslConnectionFactory(contextFactory, HttpVersion.HTTP_2.asString());
     } else {
       result = new HttpConnectionFactory(httpConfig);
     }
