@@ -39,7 +39,6 @@ import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServlet;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.eclipse.jetty.servlet.ServletContextHandler.NO_SESSIONS;

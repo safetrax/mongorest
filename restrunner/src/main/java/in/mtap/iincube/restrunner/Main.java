@@ -21,6 +21,7 @@ import in.mtap.iincube.mongoser.Mongoser;
 import in.mtap.iincube.mongoser.config.MongoConfig;
 import in.mtap.iincube.mongoser.config.ServerConfig;
 import in.mtap.iincube.mongoser.handlers.DataBaseAccessChecker;
+import in.mtap.iincube.mongoser.handlers.RequestInterceptor;
 import io.airlift.airline.Command;
 import io.airlift.airline.HelpOption;
 import io.airlift.airline.Option;
@@ -73,6 +74,7 @@ public class Main extends HelpOption implements Runnable {
     LOG.info(FANCY_THAT + "Starting the server @ [" + portNo + "]" + FANCY_THAT);
     LOG.info(FANCY_THAT + "Using mongo servers [" + mongoServer + "]" + FANCY_THAT);
 
+    //For unrestricted access to all collections, use RequestInterceptor.ALLOW_ALL
     final Mongoser mongoser = Mongoser.using(getMongoConfig(), getServerConfig(), getDataBaseAccessChecker())
         .enableDefaultAuth()
         .enableDefaultServlets()
