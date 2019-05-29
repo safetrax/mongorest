@@ -105,12 +105,12 @@ public class ReadRequestHandlerTest {
     when(reader.getDbName()).thenReturn("dbname");
     ReadRequestHandler readRequestHandler = new ReadRequestHandler(null,
         new RequestInterceptor() {
-          @Override public boolean isReadAllowed(String dbName, String colname) {
-            return false;
+          @Override public boolean isReadRestricted(String dbName, String colname) {
+            return true;
           }
 
-          @Override public boolean isWriteAllowed(String dbName, String colname) {
-            throw new AssertionError("Inappropriate call on read handler");
+          @Override public boolean isWriteRestricted(String dbName, String colname) {
+            throw new AssertionError("Inappropriate call on write handler");
           }
         });
     readRequestHandler.process(reader, response);

@@ -21,6 +21,7 @@ import in.mtap.iincube.mongoapi.MongoClient;
 import in.mtap.iincube.mongoser.auth.AuthFactory;
 import in.mtap.iincube.mongoser.config.MongoConfig;
 import in.mtap.iincube.mongoser.config.ServerConfig;
+import in.mtap.iincube.mongoser.handlers.DataBaseAccessChecker;
 import in.mtap.iincube.mongoser.handlers.GridFsRequestHandler;
 import in.mtap.iincube.mongoser.handlers.ReadRequestHandler;
 import in.mtap.iincube.mongoser.handlers.WriteRequestHandler;
@@ -38,6 +39,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServlet;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.eclipse.jetty.servlet.ServletContextHandler.NO_SESSIONS;
@@ -54,7 +56,7 @@ public class Mongoser {
     this(mongoConfig.getMongoClient(), serverConfig, new Server(), pathHttpServlet, authFactory);
   }
 
-  Mongoser(MongoClient mongoClient, ServerConfig serverConfig,
+  private Mongoser(MongoClient mongoClient, ServerConfig serverConfig,
            Server server, Map<String, HttpServlet> pathHttpServlet, AuthFactory authFactory) {
     this.mongoClient = mongoClient;
     this.serverConfig = serverConfig;
@@ -88,8 +90,9 @@ public class Mongoser {
     server.stop();
   }
 
-  public static Builder using(MongoConfig mongoConfig, ServerConfig serverConfig) {
-    return new Builder(mongoConfig, serverConfig);
+  public static Builder using(MongoConfig mongoConfig, ServerConfig serverConfig,
+                              DataBaseAccessChecker dataBaseAccessChecker) {
+    return new Builder(mongoConfig, serverConfig, dataBaseAccessChecker);
   }
 
   public static class Builder {
@@ -97,17 +100,20 @@ public class Mongoser {
     private final ServerConfig serverConfig;
     private final Map<String, HttpServlet> pathHttpServlet = new HashMap<String, HttpServlet>();
     private AuthFactory authFactory;
+    private DataBaseAccessChecker dataBaseAccessChecker;
 
-    public Builder(MongoConfig mongoConfig, ServerConfig serverConfig) {
+    public Builder(MongoConfig mongoConfig, ServerConfig serverConfig,
+                   DataBaseAccessChecker dataBaseAccessChecker) {
       this.mongoConfig = mongoConfig;
       this.serverConfig = serverConfig;
+      this.dataBaseAccessChecker = dataBaseAccessChecker;
     }
 
     public Builder enableDefaultServlets() {
       MongoClient mongoClient = mongoConfig.getMongoClient();
-      addServlet("/query", new QueryServlet(new ReadRequestHandler(mongoClient)));
-      addServlet("/write", new WriteServlet(new WriteRequestHandler(mongoClient)));
-      addServlet("/gridfs", new GridFsServlet(new GridFsRequestHandler(mongoClient)));
+      addServlet("/query", new QueryServlet(new ReadRequestHandler(mongoClient, dataBaseAccessChecker)));
+      addServlet("/write", new WriteServlet(new WriteRequestHandler(mongoClient, dataBaseAccessChecker)));
+      addServlet("/gridfs", new GridFsServlet(new GridFsRequestHandler(mongoClient, dataBaseAccessChecker)));
       addServlet("/error", new ErrorServlet());
       return this;
     }

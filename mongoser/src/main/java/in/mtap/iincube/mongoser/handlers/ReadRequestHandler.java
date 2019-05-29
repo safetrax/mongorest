@@ -64,7 +64,7 @@ public class ReadRequestHandler {
       return;
     }
 
-    if (!interceptor.isReadAllowed(requestReader.getDbName(), requestReader.getDbName())) {
+    if (interceptor.isReadRestricted(requestReader.getDbName(), requestReader.getCollectionName())) {
       responseWriter.send(SC_BAD_REQUEST,
           Status.get("Not allowed to read this namespace").toJsonTree());
       return;

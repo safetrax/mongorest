@@ -18,17 +18,17 @@
 package in.mtap.iincube.mongoser.handlers;
 
 public interface RequestInterceptor {
-  boolean isReadAllowed(String dbName, String colname);
+  boolean isReadRestricted(String dbName, String colName);
 
-  boolean isWriteAllowed(String dbName, String colname);
+  boolean isWriteRestricted(String dbName, String colName);
 
   RequestInterceptor ALLOW_ALL = new RequestInterceptor() {
-    @Override public boolean isReadAllowed(String dbName, String colname) {
-      return true;
+    @Override public boolean isReadRestricted(String dbName, String colName) {
+      return false;
     }
 
-    @Override public boolean isWriteAllowed(String dbName, String colname) {
-      return true;
+    @Override public boolean isWriteRestricted(String dbName, String colName) {
+      return false;
     }
   };
 }

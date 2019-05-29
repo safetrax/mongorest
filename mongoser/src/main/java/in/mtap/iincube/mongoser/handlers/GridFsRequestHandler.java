@@ -33,14 +33,26 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 public class GridFsRequestHandler {
   private final FsClient fsClient;
+  private final RequestInterceptor interceptor;
 
   public GridFsRequestHandler(FsClient fsClient) {
     this.fsClient = fsClient;
+    this.interceptor = RequestInterceptor.ALLOW_ALL;
+  }
+
+  public GridFsRequestHandler(FsClient fsClient, RequestInterceptor interceptor) {
+    this.fsClient = fsClient;
+    this.interceptor = interceptor;
   }
 
   public void doReadGrid(RequestReader reader, Response response) throws IOException {
     if (!hasValidParams(reader)) {
       response.send(SC_BAD_REQUEST, Status.get("dbname=null or colname=null").toJsonTree());
+      return;
+    }
+    if (interceptor.isReadRestricted(reader.getDbName(), reader.getCollectionName())) {
+      response.send(SC_BAD_REQUEST,
+              Status.get("Not allowed to read into this namespace").toJsonTree());
       return;
     }
     if (!reader.hasParam("filename")) {
@@ -61,6 +73,11 @@ public class GridFsRequestHandler {
     if (!hasValidParams(reader)) {
       response.send(SC_BAD_REQUEST,
           Status.get("dbname=null or colname=null").toJsonTree());
+      return;
+    }
+    if (interceptor.isWriteRestricted(reader.getDbName(), reader.getCollectionName())) {
+      response.send(SC_BAD_REQUEST,
+              Status.get("Not allowed to write into this namespace").toJsonTree());
       return;
     }
     if (!reader.hasParam("filename")) {

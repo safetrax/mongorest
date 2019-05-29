@@ -20,11 +20,14 @@ package in.mtap.iincube.restrunner;
 import in.mtap.iincube.mongoser.Mongoser;
 import in.mtap.iincube.mongoser.config.MongoConfig;
 import in.mtap.iincube.mongoser.config.ServerConfig;
+import in.mtap.iincube.mongoser.handlers.DataBaseAccessChecker;
 import io.airlift.airline.Command;
 import io.airlift.airline.HelpOption;
 import io.airlift.airline.Option;
 import io.airlift.airline.SingleCommand;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Command(name = Main.NAME, description = "Mongoser REST server")
@@ -56,6 +59,12 @@ public class Main extends HelpOption implements Runnable {
     return new ServerConfig.Builder(portNo).build();
   }
 
+  public DataBaseAccessChecker getDataBaseAccessChecker() {
+    List<String> readRestrictedCollections = Arrays.asList("colName");
+    List<String> writeRestrictedCollections = Arrays.asList("colName");
+    return new DataBaseAccessChecker(readRestrictedCollections, writeRestrictedCollections);
+  }
+
   @Override public void run() {
     if (showHelpIfRequested()) {
       return;
@@ -64,7 +73,7 @@ public class Main extends HelpOption implements Runnable {
     LOG.info(FANCY_THAT + "Starting the server @ [" + portNo + "]" + FANCY_THAT);
     LOG.info(FANCY_THAT + "Using mongo servers [" + mongoServer + "]" + FANCY_THAT);
 
-    final Mongoser mongoser = Mongoser.using(getMongoConfig(), getServerConfig())
+    final Mongoser mongoser = Mongoser.using(getMongoConfig(), getServerConfig(), getDataBaseAccessChecker())
         .enableDefaultAuth()
         .enableDefaultServlets()
         .build();

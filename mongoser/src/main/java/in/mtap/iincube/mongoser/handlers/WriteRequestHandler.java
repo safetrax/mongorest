@@ -61,17 +61,22 @@ public class WriteRequestHandler {
   /**
    * Doesn't maintains any state, hence ensures thread safety
    */
-  public void doInsert(RequestReader requestReader, Response response)
+  public void doInsert(RequestReader requestReader, Response responseWriter)
       throws IOException {
     if (!hasValidParams(requestReader)) {
-      response.send(SC_BAD_REQUEST,
+      responseWriter.send(SC_BAD_REQUEST,
           Status.get(MISSING_DB_COL_PARAMS).toJsonTree());
+      return;
+    }
+    if (interceptor.isWriteRestricted(requestReader.getDbName(), requestReader.getCollectionName())) {
+      responseWriter.send(SC_BAD_REQUEST,
+              Status.get("Not allowed to write into this namespace").toJsonTree());
       return;
     }
 
     Result<List<DBObject>> resultData = requestReader.readResultDbObject();
     if (!resultData.isValid()) {
-      response.send(SC_BAD_REQUEST, Status.get(PARSE_ERROR).toJsonTree());
+      responseWriter.send(SC_BAD_REQUEST, Status.get(PARSE_ERROR).toJsonTree());
       return;
     }
 
@@ -79,7 +84,7 @@ public class WriteRequestHandler {
         requestReader.getCollectionName());
     mongoWriter.insert(resultData.getData());
     mongoWriter.execute();
-    response.send(SC_OK, new Gson().toJsonTree(getStringIds(resultData.getData())));
+    responseWriter.send(SC_OK, new Gson().toJsonTree(getStringIds(resultData.getData())));
   }
 
   /**
@@ -96,6 +101,11 @@ public class WriteRequestHandler {
     Result<List<DBObject>> dataResult = requestReader.readResultDbObject();
     if (!dataResult.isValid()) {
       responseWriter.send(SC_BAD_REQUEST, Status.get(PARSE_ERROR).toJsonTree());
+      return;
+    }
+    if (interceptor.isWriteRestricted(requestReader.getDbName(), requestReader.getCollectionName())) {
+      responseWriter.send(SC_BAD_REQUEST,
+              Status.get("Not allowed to write into this namespace").toJsonTree());
       return;
     }
 
