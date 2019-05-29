@@ -21,7 +21,6 @@ import in.mtap.iincube.mongoser.Mongoser;
 import in.mtap.iincube.mongoser.config.MongoConfig;
 import in.mtap.iincube.mongoser.config.ServerConfig;
 import in.mtap.iincube.mongoser.handlers.DataBaseAccessChecker;
-import in.mtap.iincube.mongoser.handlers.RequestInterceptor;
 import io.airlift.airline.Command;
 import io.airlift.airline.HelpOption;
 import io.airlift.airline.Option;
