@@ -110,7 +110,7 @@ public class ReadRequestHandlerTest {
           }
 
           @Override public boolean isWriteRestricted(String dbName, String colname) {
-            throw new AssertionError("Inappropriate call on write handler");
+            throw new AssertionError("Inappropriate call on read handler");
           }
         });
     readRequestHandler.process(reader, response);
