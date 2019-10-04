@@ -22,11 +22,16 @@ import in.mtap.iincube.mongoser.codec.JsonArrayDecoder;
 import in.mtap.iincube.mongoser.codec.Result;
 import in.mtap.iincube.mongoser.codec.SimpleLineDecoder;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -210,6 +215,23 @@ public class RequestReader {
 
   public String getUrlParameter(String name) {
     return request.getParameter(name);
+  }
+
+  public File getFilePart(String fileKey) throws IOException, ServletException {
+    Part filePart = request.getPart(fileKey);
+    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+    InputStream is = filePart.getInputStream();
+
+    File file = new File("/tmp/" + fileName);
+    FileOutputStream fos = new FileOutputStream(file);
+    int read = 0;
+    byte[] bytes = new byte[1024];
+    while ((read = is.read(bytes)) != -1) {
+      fos.write(bytes, 0, read);
+    }
+    is.close();
+    fos.close();
+    return file;
   }
 
   public String getContentType() {
