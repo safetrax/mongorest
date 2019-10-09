@@ -22,4 +22,7 @@ project.properties
 
 # remove gradle unwanted files
 build/
+gradle/
+gradlew*
+*/out/
 .gradle/
