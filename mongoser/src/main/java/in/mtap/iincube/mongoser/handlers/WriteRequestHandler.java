@@ -19,6 +19,7 @@ package in.mtap.iincube.mongoser.handlers;
 
 import com.google.gson.Gson;
 import com.mongodb.DBObject;
+import com.mongodb.QueryOperators;
 import in.mtap.iincube.mongoapi.DocumentClient;
 import in.mtap.iincube.mongoapi.MongoUpdater;
 import in.mtap.iincube.mongoapi.MongoWriter;
@@ -29,7 +30,9 @@ import in.mtap.iincube.mongoser.model.Status;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static in.mtap.iincube.mongoser.handlers.DbRequestHandler.MISSING_DB_COL_PARAMS;
 import static in.mtap.iincube.mongoser.handlers.DbRequestHandler.PARSE_ERROR;
@@ -40,6 +43,17 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 public class WriteRequestHandler {
   private final DocumentClient documentClient;
   private final RequestInterceptor interceptor;
+
+  static final String INVALID_LIMIT_SKIP = "skip or limit param is invalid";
+  static final String[] invalidKeys = new String[]{"$where", "mapReduce", "$accumulator", "$function"};
+  static final List<String> validKeys = Arrays.stream(QueryOperators.class.getDeclaredFields()).map(e -> {
+    try {
+      return ((String)e.get(null));
+    } catch (IllegalAccessException illegalAccessException) {
+      illegalAccessException.printStackTrace();
+    }
+    return "$or";
+  }).collect(Collectors.toList());
 
   public WriteRequestHandler(DocumentClient documentClient) {
     this(documentClient, RequestInterceptor.ALLOW_ALL);
@@ -113,8 +127,27 @@ public class WriteRequestHandler {
 
     MongoUpdater updater = documentClient.update(requestReader.getDbName(),
         requestReader.getCollectionName());
+    if (isInValidQuery(dbObjects.get(1)))
+      responseWriter.send(SC_BAD_REQUEST,
+              Status.get("Invalid Query").toJsonTree());
     updater.find(dbObjects.get(0)).update(dbObjects.get(1)).multi(multi).upsert(upsert);
     updater.execute();
     responseWriter.send(SC_OK, Status.OK.toJsonTree());
   }
+
+  private boolean isInValidQuery(DBObject query) {
+    for (String key : query.keySet()) {
+      if (Arrays.stream(invalidKeys).anyMatch(key::equalsIgnoreCase))
+        return true;
+      if (key.length() == 0)
+        return true;
+      if (key.charAt(0) == '$')
+        if (validKeys.parallelStream().noneMatch(key::equalsIgnoreCase))
+          return true;
+      if (query.get(key) instanceof DBObject && isInValidQuery((DBObject) query.get(key)))
+        return true;
+    }
+    return false;
+  }
+
 }

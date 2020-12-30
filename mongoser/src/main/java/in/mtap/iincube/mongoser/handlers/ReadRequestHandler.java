@@ -20,6 +20,7 @@ package in.mtap.iincube.mongoser.handlers;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.QueryOperators;
 import in.mtap.iincube.mongoapi.DocumentClient;
 import in.mtap.iincube.mongoapi.MongoReader;
 import in.mtap.iincube.mongoser.MongoserException;
@@ -30,7 +31,9 @@ import in.mtap.iincube.mongoser.codec.io.Response;
 import in.mtap.iincube.mongoser.model.Status;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static in.mtap.iincube.mongoser.handlers.DbRequestHandler.MISSING_DB_COL_PARAMS;
 import static in.mtap.iincube.mongoser.handlers.DbRequestHandler.PARSE_ERROR;
@@ -40,6 +43,16 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 public class ReadRequestHandler {
   static final String INVALID_LIMIT_SKIP = "skip or limit param is invalid";
+  static final String[] invalidKeys = new String[]{"$where", "mapReduce", "$accumulator", "$function"};
+  static final List<String> validKeys = Arrays.stream(QueryOperators.class.getDeclaredFields()).map(e -> {
+    try {
+      return ((String)e.get(null));
+    } catch (IllegalAccessException illegalAccessException) {
+      illegalAccessException.printStackTrace();
+    }
+    return "$or";
+  }).collect(Collectors.toList());
+
   private final DocumentClient documentClient;
   private final RequestInterceptor interceptor;
   private final JsonEncoder jsonEncoder = new JsonEncoder();
@@ -76,6 +89,21 @@ public class ReadRequestHandler {
     }
   }
 
+  private boolean isInValidQuery(DBObject query) {
+    for (String key : query.keySet()) {
+      if (Arrays.stream(invalidKeys).anyMatch(key::equalsIgnoreCase))
+        return true;
+      if (key.length() == 0)
+        return true;
+      if (key.charAt(0) == '$')
+        if (validKeys.parallelStream().noneMatch(key::equalsIgnoreCase))
+          return true;
+      if (query.get(key) instanceof DBObject && isInValidQuery((DBObject) query.get(key)))
+        return true;
+    }
+    return false;
+  }
+
   private void processFindRequest(RequestReader requestReader, Response responseWriter)
       throws IOException {
     int skip = -1;
@@ -110,6 +138,9 @@ public class ReadRequestHandler {
     }
 
     List<DBObject> queryData = resultData.getData();
+    if (isInValidQuery(queryData.get(0)))
+      responseWriter.send(SC_BAD_REQUEST,
+              Status.get("Invalid Query").toJsonTree());
     mongoReader.find(queryData.get(0));
 
     // set sort if available
@@ -138,6 +169,11 @@ public class ReadRequestHandler {
         requestReader.getCollectionName());
 
     List<DBObject> queryData = resultData.getData();
+    if (queryData.size() > 0) {
+      if (isInValidQuery(queryData.get(0)))
+        responseWriter.send(SC_BAD_REQUEST,
+                Status.get("Invalid Query").toJsonTree());
+    }
     mongoReader.find((queryData.size() > 0) ? queryData.get(0) : new BasicDBObject());
 
     try {
@@ -158,4 +194,5 @@ public class ReadRequestHandler {
       }
     };
   }
+
 }

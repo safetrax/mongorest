@@ -52,7 +52,7 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
     if (MongoserException.class.equals(exceptionClass)) {
       MongoserException exception = (MongoserException) req.getAttribute(Dispatcher.ERROR_EXCEPTION);
 
-      res.setContentType("application/json;charset=UTF-8");
+      res.setContentType("application/json");
       res.setStatus(exception.getCode());
 
       Status st = exception.getStatus();
@@ -72,7 +72,7 @@ public class MongoserErrorHandler extends ErrorPageErrorHandler {
 
   private void writeMongoError(String msg, Request baseRequest, HttpServletResponse res)
       throws IOException {
-    res.setContentType("application/json;charset=UTF-8");
+    res.setContentType("application/json");
     res.setStatus(SC_BAD_REQUEST);
 
     Status st = Status.get(msg);

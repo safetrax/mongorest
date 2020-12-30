@@ -43,7 +43,7 @@ public interface Meta {
 
   Meta JSON = new Meta() {
     @Override public void set(HttpServletResponse response) {
-      response.setContentType("application/json;charset=UTF-8");
+      response.setContentType("application/json");
     }
   };
 }

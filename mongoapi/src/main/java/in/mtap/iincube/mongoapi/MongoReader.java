@@ -34,6 +34,7 @@ public class MongoReader {
   private String[] fields;
   private DBObject queryObject;
   private DBObject sortObject;
+  private String indexName;
 
   MongoReader(MongoObjectFactory<DBCollection> collectionFactory) {
     this.collectionFactory = collectionFactory;
@@ -64,6 +65,11 @@ public class MongoReader {
     return this;
   }
 
+  public MongoReader index(String indexName) {
+    this.indexName = indexName;
+    return this;
+  }
+
   private DBCursor getCursor() {
     DBCollection collection = collectionFactory.get();
     assertNotNull(queryObject, "findQuery == null");
@@ -77,6 +83,8 @@ public class MongoReader {
     } else {
       cursor = collection.find(queryObject);
     }
+    if (indexName != null)
+      cursor.hint(indexName);
     if (skip > 0)
       cursor.skip(skip);
     if (limit > 0)
