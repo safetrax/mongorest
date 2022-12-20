@@ -18,11 +18,13 @@
 package in.mtap.iincube.mongoser.config;
 
 import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import in.mtap.iincube.mongoapi.MongoClient;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -79,8 +81,25 @@ public class MongoConfig {
       }
       opts.threadsAllowedToBlockForConnectionMultiplier(10);
       opts.maxWaitTime(10000);
-      mongo = new com.mongodb.MongoClient(serverAddresses, opts.build());
-      return mongo;
+      boolean mongoAuth = false;
+      if (System.getenv("SAFETRAX_MONGODB_AUTH") != null)
+        mongoAuth = Boolean.parseBoolean(System.getenv("SAFETRAX_MONGODB_AUTH"));
+      if (mongoAuth) {
+        String userName = System.getenv("SAFETRAX_MONGODB_USER");
+        String password = System.getenv("SAFETRAX_MONGODB_PASS");
+        if (userName == null || password == null) {
+          System.out.println("DB Auth is set to true, but username/password are not set");
+          System.exit(2);
+        }
+        MongoCredential credential  = MongoCredential.createScramSha1Credential(
+                userName, "admin", password.toCharArray());
+        mongo = new com.mongodb.MongoClient(serverAddresses, Arrays.asList(credential), opts.build());
+        return mongo;
+      } else {
+        System.out.println("Inside branch MongoserAuth/master/rajan");
+        mongo = new com.mongodb.MongoClient(serverAddresses,  opts.build());
+        return mongo;
+      }
     } catch (UnknownHostException e) {
       throw new IllegalArgumentException("Unknown host : " + servers);
     }

@@ -7,9 +7,9 @@ repositories {
 dependencies {
     compile libraries.mongoDriver
 
-    testCompile libraries.junit
-    testCompile libraries.googleTruth
-    testCompile libraries.mockito
+    testImplementation libraries.junit
+    testImplementation libraries.googleTruth
+    testImplementation libraries.mockito
 }
 
 apply from: rootProject.file('gradle/test.gradle')
