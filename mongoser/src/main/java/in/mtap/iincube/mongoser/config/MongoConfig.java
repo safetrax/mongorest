@@ -96,7 +96,7 @@ public class MongoConfig {
         mongo = new com.mongodb.MongoClient(serverAddresses, Arrays.asList(credential), opts.build());
         return mongo;
       } else {
-        System.out.println("Inside branch MongoserAuth/master/rajan");
+        System.out.println("Mongo Auhentication branch");
         mongo = new com.mongodb.MongoClient(serverAddresses,  opts.build());
         return mongo;
       }
