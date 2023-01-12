@@ -87,12 +87,13 @@ public class MongoConfig {
       if (mongoAuth) {
         String userName = System.getenv("SAFETRAX_MONGODB_USER");
         String password = System.getenv("SAFETRAX_MONGODB_PASS");
+        String dbName = System.getenv("SAFETRAX_MONGODB_DBNAME");
         if (userName == null || password == null) {
           System.out.println("DB Auth is set to true, but username/password are not set");
           System.exit(2);
         }
         MongoCredential credential  = MongoCredential.createScramSha1Credential(
-                userName, "admin", password.toCharArray());
+                userName, dbName, password.toCharArray());
         mongo = new com.mongodb.MongoClient(serverAddresses, Arrays.asList(credential), opts.build());
         return mongo;
       } else {
